@@ -43,6 +43,14 @@ module.exports = {
         posts = posts.filter((post) => post.id === id)
       }
 
+      if (req.query.categoria) {
+        posts = posts.filter((post) => post.categoria === req.query.categoria)
+      }
+
+      if (req.query.subcategoria) {
+        posts = posts.filter((post) => post.subcategoria === req.query.subcategoria)
+      }
+
       res.send(conversor.converter(posts))
     } catch (erro) {
       return res.status(500).json({ erro: erro.message })

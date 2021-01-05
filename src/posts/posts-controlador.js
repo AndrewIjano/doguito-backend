@@ -5,7 +5,9 @@ const { ConversorPost } = require('../conversores')
 module.exports = {
   async adiciona(req, res) {
     try {
-      req.user = { id: 1 }
+      if (process.env.SEM_AUTH === 'true') {
+        req.user = { id: 1 }
+      }
 
       const adicionaPost = async (conteudoPost) => {
         conteudoPost.autor = req.user.id // adiciona o autor do post

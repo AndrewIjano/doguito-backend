@@ -2,9 +2,13 @@ const { middlewaresAutenticacao } = require('../usuarios')
 module.exports = (requisicao, resposta, proximo) => {
   requisicao.estaAutenticado = false
 
-  // if (requisicao.get('Authorization')) {
-  return middlewaresAutenticacao.bearer(requisicao, resposta, proximo)
-  // }
+  if (process.env.SEM_AUTH === 'true') {
+    return middlewaresAutenticacao.bearer(requisicao, resposta, proximo)
+  }
 
-  // proximo()
+  if (requisicao.get('Authorization')) {
+    return middlewaresAutenticacao.bearer(requisicao, resposta, proximo)
+  }
+
+  proximo()
 }

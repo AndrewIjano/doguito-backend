@@ -1,6 +1,7 @@
 const passport = require('passport')
 const Usuario = require('./usuarios-modelo')
 const tokens = require('./tokens')
+const { NaoAutorizado } = require('../erros')
 
 module.exports = {
   local(req, res, next) {
@@ -12,6 +13,10 @@ module.exports = {
           return next(erro)
         }
 
+        if (!usuario) {
+          return next(new NaoAutorizado())
+        }
+
         req.user = usuario
         req.estaAutenticado = true
         return next()
@@ -20,24 +25,30 @@ module.exports = {
   },
 
   async bearer(req, res, next) {
-    req.user = await Usuario.buscaPorId(1)
-    req.estaAutenticado = true
-    return next()
+    if (process.env.SEM_AUTH === 'true') {
+      req.user = await Usuario.buscaPorId(1)
+      req.estaAutenticado = true
+      return next()
+    }
 
-    // passport.authenticate(
-    //   'bearer',
-    //   { session: false },
-    //   (erro, usuario, info) => {
-    //     if (erro) {
-    //       return next(erro)
-    //     }
+    passport.authenticate(
+      'bearer',
+      { session: false },
+      (erro, usuario, info) => {
+        if (erro) {
+          return next(erro)
+        }
 
-    //     req.token = info.token
-    //     req.user = usuario
-    //     req.estaAutenticado = true
-    //     return next()
-    //   }
-    // )(req, res, next)
+        if (!usuario) {
+          return next(new NaoAutorizado())
+        }
+
+        req.token = info.token
+        req.user = usuario
+        req.estaAutenticado = true
+        return next()
+      },
+    )(req, res, next)
   },
 
   async refresh(req, res, next) {

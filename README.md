@@ -1,3 +1,3 @@
-# Blog do código
+# 🐶 Doguito blog
 
 > Uma API de blog em Node.js

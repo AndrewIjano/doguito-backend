@@ -15,7 +15,6 @@ const metodos = {
   },
 }
 module.exports = (entidade, acao) => (requisicao, resposta, proximo) => {
-  console.log(requisicao.user)
   const permissoesDoCargo = controle.can(requisicao.user.cargo)
   const acoes = metodos[acao]
   const permissaoTodos = permissoesDoCargo[acoes.todos](entidade)

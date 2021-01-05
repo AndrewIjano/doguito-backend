@@ -6,11 +6,24 @@ module.exports = {
   async adiciona(req, res) {
     try {
       req.user = { id: 1 }
-      req.body.autor = req.user.id
-      const post = new Post(req.body)
-      await post.adiciona()
 
-      res.status(201).json(post)
+      const adicionaPost = async (conteudoPost) => {
+        conteudoPost.autor = req.user.id // adiciona o autor do post
+        const post = new Post(conteudoPost)
+        await post.adiciona()
+        return post
+      }
+
+      const adicionaPosts = (listaDePosts) => {
+        return Promise.all(listaDePosts.map(adicionaPost))
+      }
+
+      const postAdicionado =
+        req.body instanceof Array
+          ? await adicionaPosts(req.body) // adiciona uma lista de posts
+          : await adicionaPost(req.body) // adiciona apenas um post
+
+      res.status(201).json(postAdicionado)
     } catch (erro) {
       if (erro instanceof InvalidArgumentError) {
         return res.status(400).json({ erro: erro.message })
@@ -48,7 +61,9 @@ module.exports = {
       }
 
       if (req.query.subcategoria) {
-        posts = posts.filter((post) => post.subcategoria === req.query.subcategoria)
+        posts = posts.filter(
+          (post) => post.subcategoria === req.query.subcategoria,
+        )
       }
 
       res.send(conversor.converter(posts))

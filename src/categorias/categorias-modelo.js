@@ -10,8 +10,9 @@ class Categoria {
 
   valida() {}
 
-  listaSubcategorias() {
-    return categoriasDao.listaSubcategorias(this.nome)
+  async listaSubcategorias() {
+    const subcategorias = await categoriasDao.listaSubcategorias(this.nome)
+    return subcategorias.map((s) => s.nome)
   }
 
   static listarTodos() {

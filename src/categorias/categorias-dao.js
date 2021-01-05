@@ -33,7 +33,7 @@ module.exports = {
   async listaSubcategorias(categoriaNome) {
     try {
       return await dbAll(`
-        SELECT s.id, s.nome  
+        SELECT s.nome  
         FROM subcategorias s
         INNER JOIN categorias c
         ON s.categoriaId = c.id

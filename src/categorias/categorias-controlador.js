@@ -15,6 +15,7 @@ module.exports = {
       const { categoriaNome } = req.params
       const categoria = await Categoria.buscaPorNome(categoriaNome)
       const subcategorias = await categoria.listaSubcategorias()
+      console.log(subcategorias)
       res.status(200).json({ ...categoria, subcategorias })
     } catch (erro) {
       return res.status(500).json({ erro: erro.message })

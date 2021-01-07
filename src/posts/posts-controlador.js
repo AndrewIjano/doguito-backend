@@ -44,15 +44,6 @@ module.exports = {
           : req.acesso.apenasSeu.atributos,
       )
 
-      if (!req.estaAutenticado) {
-        posts = posts.map((post) => {
-          post.conteudo =
-            post.conteudo.substr(0, 10) +
-            '... Você precisa assinar o blog para ler o restante do post'
-          return post
-        })
-      }
-
       if (isNaN(Number(req.query.autor)) === false) {
         const id = req.query.autor
         posts = posts.filter((post) => post.id === id)
@@ -76,7 +67,7 @@ module.exports = {
 
   async obterDetalhes(req, res) {
     try {
-      const post = await Post.buscaPorId(req.params.id, req.user.id)
+      const post = await Post.buscaPorId(req.params.id)
       res.json(post)
     } catch (erro) {
       return res.status(500).json({ erro: erro.message })

@@ -2,9 +2,19 @@ const AccessControl = require('accesscontrol')
 const controle = new AccessControl()
 
 controle
-  .grant('assinante')
-  .readAny('post', ['id', 'titulo', 'conteudo', 'autor'])
+  .grant('leitor')
+  .readAny('post', [
+    'id',
+    'title',
+    'metadescription',
+    'body',
+    'categoria',
+    'subcategoria',
+    'autor',
+  ])
   .readAny('usuario', ['nome'])
+  
+controle.grant('assinante').extend('leitor')
 
 controle.grant('editor').extend('assinante').createOwn('post').deleteOwn('post')
 

@@ -10,5 +10,6 @@ module.exports = (requisicao, resposta, proximo) => {
     return middlewaresAutenticacao.bearer(requisicao, resposta, proximo)
   }
 
+  requisicao.user = { cargo: 'leitor' }
   proximo()
 }

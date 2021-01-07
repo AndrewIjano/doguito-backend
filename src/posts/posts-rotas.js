@@ -19,7 +19,7 @@ module.exports = (app) => {
   app
     .route('/posts/:id')
     .get(
-      [middlewaresAutenticacao.bearer, autorizacao('post', 'ler')],
+      [tentarAutenticar, autorizacao('post', 'ler')],
       postsControlador.obterDetalhes,
     )
     .delete(

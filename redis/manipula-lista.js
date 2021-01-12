@@ -3,11 +3,12 @@ const { promisify } = require('util')
 module.exports = (lista) => {
   return {
     async adiciona(chave, valor, dataExpiracao) {
-      await lista.set(chave, valor, dataExpiracao - Date.now()) 
+      await lista.set(chave, valor, Date.now() - dataExpiracao)
     },
 
     async buscaValor(chave) {
-      return lista.get(chave)
+      const id = await lista.get(chave)
+      return await id
     },
 
     async contemChave(chave) {

@@ -41,6 +41,7 @@ async function criaTokenOpaco(id, [tempoQuantidade, tempoUnidade], allowlist) {
   const tokenOpaco = crypto.randomBytes(24).toString('hex')
   const dataExpiracao = moment().add(tempoQuantidade, tempoUnidade).unix()
   await allowlist.adiciona(tokenOpaco, id, dataExpiracao)
+
   return tokenOpaco
 }
 
@@ -71,7 +72,7 @@ module.exports = {
   access: {
     nome: 'access token',
     lista: blocklistAccessToken,
-    expiracao: [15, 'm'],
+    expiracao: [1, 'm'],
     cria(id) {
       return criaTokenJWT(id, this.expiracao)
     },
